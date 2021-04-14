@@ -3,17 +3,10 @@ class Magazine < ActiveRecord::Base
     has_many :readers, through: :subscriptions
 
     def email_list
-        list = ''
-        readers.each { |r| list += "#{r.email};" }
-        list
+        readers.map(&:email).join('; ')
     end
 
-    scope :most_popular,
-          -> {
-              Magazine
-                  .joins(:subscriptions)
-                  .group('subscriptions.magazine_id')
-                  .order('count(subscriptions.magazine_id) desc')
-                  .first
-          }
+    def self.most_popular2
+        self.all.sort_by { |m| m.subscriptions.size }.last
+    end
 end
