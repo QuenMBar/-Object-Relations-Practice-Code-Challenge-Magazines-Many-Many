@@ -6,7 +6,7 @@ class Magazine < ActiveRecord::Base
         readers.map(&:email).join('; ')
     end
 
-    def self.most_popular2
-        self.all.sort_by { |m| m.subscriptions.size }.last
+    def self.most_popular
+        all.max_by { |m| m.subscriptions.size }
     end
 end
